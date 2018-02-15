@@ -19,6 +19,8 @@ while True:
 		if not data:
 			break
 		s.append(data)
+
+	conn.send(b'Hello\n')
 	print len(s), s
 	sql = """INSERT INTO data(BOT_ID, FLAG, BUFF)
         VALUES ('%(BOT_ID)s', '%(FLAG)s', '%(BUFF)s')

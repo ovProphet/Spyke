@@ -1,0 +1,7 @@
+﻿  BotnetWin32.cpp
+c:\users\melni\documents\visual studio 2015\projects\botnetwin32\botnetwin32\utils.h(18): warning C4018: '<': signed/unsigned mismatch
+c:\users\melni\documents\visual studio 2015\projects\botnetwin32\botnetwin32\utils.h(19): warning C4244: '=': conversion from 'TCHAR' to 'char', possible loss of data
+c:\users\melni\documents\visual studio 2015\projects\botnetwin32\botnetwin32\connection.h(16): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\8.1\include\um\winsock2.h(1850): note: see declaration of 'inet_addr'
+  BotnetWin32.vcxproj -> C:\Users\Melni\documents\visual studio 2015\Projects\BotnetWin32\Debug\BotnetWin32.exe
+  BotnetWin32.vcxproj -> C:\Users\Melni\documents\visual studio 2015\Projects\BotnetWin32\Debug\BotnetWin32.pdb (Full PDB)
