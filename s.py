@@ -9,13 +9,13 @@ db = MySQLdb.connect(host="localhost", user="root", passwd="", db="botnet")
 while True:
 	sock.listen(1)
 	conn, addr = sock.accept()
-	print 'connected:', addr
+	print('connected:', addr)
 	cursor = db.cursor()
 
 	s = []
 	while True:
 		data = conn.recv(1024)
-		print data
+		print(data)
 		if not data:
 			break
 		s.append(data)

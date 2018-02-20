@@ -64,6 +64,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	conn.Send("I am alive!");
 	conn.Shutdown(); //otherwise it freezes
 	conn.Recv(); // use GetBuf to retrieve the contents of buffer
+
 	return 0;
 }
 
