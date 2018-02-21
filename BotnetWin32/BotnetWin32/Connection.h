@@ -32,8 +32,10 @@ public:
 	void Send(char* message);
 	char* Recv();
 	char* GetBuf() { return buf; };
+	void SendBasicInfo(string id, string log);
+	char * ReadCommand();
 private:
-	char buf[1024];
+	char buf[1000000];
 	SOCKET server;
 	SOCKADDR_IN addr;
 };

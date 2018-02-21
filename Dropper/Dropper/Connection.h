@@ -33,7 +33,7 @@ public:
 	char* Recv();
 	char* GetBuf() { return buf; };
 private:
-	char buf[250000];
+	char buf[1000000];
 	SOCKET server;
 	SOCKADDR_IN addr;
 };

