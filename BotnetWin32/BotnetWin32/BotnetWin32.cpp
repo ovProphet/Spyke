@@ -7,7 +7,7 @@
 #include "Connection.h"
 #include "base64.h"
 
-char* ip = "127.0.0.1";
+char* ip = "192.168.0.45";
 TCHAR buf[255] = { 0 };
 Utils utils;
 Connection conn(ip, 80);
