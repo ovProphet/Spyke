@@ -32,6 +32,6 @@
 #include <ctime>
 #include <Lmcons.h>
 #include <sstream>
-
+#include <curl/curl.h>
 using namespace std;
 // TODO: reference additional headers your program requires here

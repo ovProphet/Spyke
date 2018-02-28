@@ -33,6 +33,7 @@
 #include <cstdlib>
 #include <Lmcons.h>
 #include <sstream>
+#include <curl/curl.h>
 
 using namespace std;
 
