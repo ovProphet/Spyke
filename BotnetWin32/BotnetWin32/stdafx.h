@@ -34,7 +34,9 @@
 #include <Lmcons.h>
 #include <sstream>
 #include <curl/curl.h>
+#include <boost/filesystem.hpp>
 
+using namespace boost::filesystem;
 using namespace std;
 
 // TODO: reference additional headers your program requires here

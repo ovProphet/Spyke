@@ -1,11 +1,12 @@
 ﻿  BotnetWin32.cpp
 c:\users\melni\desktop\spyke\botnetwin32\botnetwin32\Utils.h(18): warning C4018: <: несоответствие типов со знаком и без знака
 c:\users\melni\desktop\spyke\botnetwin32\botnetwin32\Utils.h(19): warning C4244: =: преобразование "TCHAR" в "char", возможна потеря данных
-  Connection.cpp
+BotnetWin32.cpp(88): warning C4244: аргумент: преобразование "__int64" в "unsigned int", возможна потеря данных
+BotnetWin32.cpp(92): warning C4244: аргумент: преобразование "__int64" в "unsigned int", возможна потеря данных
   Создание кода
-  9 of 251 functions ( 3.6%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  129 of 809 functions (15.9%) were compiled, the rest were copied from previous compilation.
+    15 functions were new in current compilation
+    48 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
   BotnetWin32.vcxproj -> C:\Users\Melni\Desktop\Spyke\BotnetWin32\Release\BotnetWin32.exe
   BotnetWin32.vcxproj -> C:\Users\Melni\Desktop\Spyke\BotnetWin32\Release\BotnetWin32.pdb (Full PDB)
