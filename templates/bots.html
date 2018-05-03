@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Bots</h1>
+{{ table_1.__html__() | safe}}
+<h1>Logs</h1>
+{{ table_2.__html__() | safe}}
+{% endblock %}

@@ -18,6 +18,7 @@ public:
 	void HTTPPost(string id, string message, string subdirectory = "");
 	string GetBuffer() { return buffer; };
 	string GetIP() { return ip; };
+	void SetIP(string new_ip) { ip = new_ip; }
 private:
 	string ip;
 	string buffer;

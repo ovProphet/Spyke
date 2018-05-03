@@ -13,6 +13,7 @@ public:
 	void CreateDir(TCHAR *dir);
 	bool FileExists(const char* fname);
 	char* GetID() { return ID; }
+	string GetVersion();
 	void SetID(TCHAR* str)
 	{
 		for (int i = 0; i < _tcslen(str); ++i)

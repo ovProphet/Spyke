@@ -8,7 +8,7 @@
 #include "base64.h"
 
 string ip = "192.168.0.45";
-//string ip = "192.168.0.10";
+//string ip = "172.17.0.33";
 TCHAR buf[255] = { 0 };
 Utils utils;
 base64 base;

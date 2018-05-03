@@ -7,7 +7,7 @@ bool PathContainsName(string characters, path file_path)
 	string buffer = file_path.generic_string();
 	return buffer.find(characters) != string::npos;
 }
-void FindByFilename(string characters, path dir_path, vector<string>& files)
+void FindByFilename(string characters, path dir_path, vector<pair<string,bool>>& files)
 {
 	boost::system::error_code ec;
 	vector<boost::filesystem::path> result;
@@ -23,7 +23,15 @@ void FindByFilename(string characters, path dir_path, vector<string>& files)
 		}
 		else if (PathContainsName(characters, itr->path())) // see below
 		{
-			files.push_back((itr->path()).generic_string());
+			bool not_new = false;
+			for (auto file : files)
+				if (file.first == (itr->path()).generic_string())
+				{
+					not_new = true;
+					break;
+				}
+			if(!not_new)
+				files.push_back(make_pair((itr->path()).generic_string(),false));
 		}
 	}
 }

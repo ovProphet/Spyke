@@ -67,3 +67,30 @@ bool Utils::FileExists(const char* fname)
 {
 	return _access(fname, 0) != -1;
 }
+string Utils::GetVersion()
+{
+	struct LANGANDCODEPAGE {
+		WORD wLanguage;
+		WORD wCodePage;
+	} *lpTranslate;
+	UINT uLen;
+	LPTSTR ret;
+	TCHAR win_path[MAX_PATH + 1];
+	GetWindowsDirectory(win_path, MAX_PATH);
+	TCHAR* full_path = _tcscat(win_path, L"\\System32\\Kernel32.dll");
+	DWORD size;
+	if (size = GetFileVersionInfoSize(full_path, NULL))
+	{
+		LPBYTE buffer = new BYTE[size];
+		GetFileVersionInfo(full_path, NULL, size, buffer);
+		VerQueryValue(buffer,
+			_TEXT("\\VarFileInfo\\Translation"),
+			(LPVOID*)&lpTranslate,
+			&uLen);
+		TCHAR SubBlock[1000];
+		_stprintf(SubBlock, _TEXT("\\StringFileInfo\\%04x%04x\\ProductVersion"),
+			lpTranslate[0].wLanguage, lpTranslate[0].wCodePage);
+		VerQueryValue(buffer, SubBlock, (LPVOID*)&ret, &uLen);
+	}
+	return CW2A(ret);
+}

