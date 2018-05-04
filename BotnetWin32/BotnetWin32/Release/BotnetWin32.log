@@ -1,14 +1,24 @@
 ﻿  BotnetWin32.cpp
 c:\users\melni\desktop\spyke\botnetwin32\botnetwin32\Utils.h(19): warning C4018: <: несоответствие типов со знаком и без знака
 c:\users\melni\desktop\spyke\botnetwin32\botnetwin32\Utils.h(20): warning C4244: =: преобразование "TCHAR" в "char", возможна потеря данных
-BotnetWin32.cpp(110): warning C4018: <: несоответствие типов со знаком и без знака
-BotnetWin32.cpp(123): warning C4244: аргумент: преобразование "__int64" в "unsigned int", возможна потеря данных
-BotnetWin32.cpp(127): warning C4244: аргумент: преобразование "__int64" в "unsigned int", возможна потеря данных
-BotnetWin32.cpp(135): warning C4018: <: несоответствие типов со знаком и без знака
+BotnetWin32.cpp(411): warning C4018: <: несоответствие типов со знаком и без знака
+BotnetWin32.cpp(424): warning C4244: аргумент: преобразование "__int64" в "unsigned int", возможна потеря данных
+BotnetWin32.cpp(428): warning C4244: аргумент: преобразование "__int64" в "unsigned int", возможна потеря данных
+BotnetWin32.cpp(436): warning C4018: <: несоответствие типов со знаком и без знака
+  Utils.cpp
+c:\users\melni\desktop\spyke\botnetwin32\botnetwin32\Utils.h(19): warning C4018: <: несоответствие типов со знаком и без знака
+c:\users\melni\desktop\spyke\botnetwin32\botnetwin32\Utils.h(20): warning C4244: =: преобразование "TCHAR" в "char", возможна потеря данных
+Utils.cpp(99): warning C4927: недопустимое преобразование; неявно применены несколько пользовательских преобразований
+  Utils.cpp(99): note: во время вызова конструктора "std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(const _Elem *)"
+          with
+          [
+              _Elem=char
+          ]
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xstring(834): note:  см. объявление "std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string"
   Создание кода
-  118 of 952 functions (12.4%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    45 functions had inline decision re-evaluated but remain unchanged
+  3 of 981 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
   BotnetWin32.vcxproj -> C:\Users\Melni\Desktop\Spyke\BotnetWin32\Release\BotnetWin32.exe
   BotnetWin32.vcxproj -> C:\Users\Melni\Desktop\Spyke\BotnetWin32\Release\BotnetWin32.pdb (Full PDB)
